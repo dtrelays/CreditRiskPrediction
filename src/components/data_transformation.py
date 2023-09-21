@@ -59,11 +59,11 @@ class DataTransformation:
 
             logging.info("Obtaining preprocessing object")
             
-            input_feature_train_df = train_df.drop(columns=['Profile Score','TwoWheeler Cost'],axis=1)
-            target_feature_train_df = train_df['Profile Score']
+            input_feature_train_df = train_df.drop(columns=['Default','Status'],axis=1)
+            target_feature_train_df = train_df['Default']
 
-            input_feature_test_df=test_df.drop(columns=['Profile Score','TwoWheeler Cost'],axis=1)
-            target_feature_test_df=test_df['Profile Score']
+            input_feature_test_df=test_df.drop(columns=['Default','Status'],axis=1)
+            target_feature_test_df=test_df['Default']
             
             preprocessing_obj=self.get_data_transformer_object(input_feature_train_df)
 
@@ -87,8 +87,8 @@ class DataTransformation:
             
             logging.info(target_feature_train_df_v2[:5])
 
-            train_arr = np.hstack((input_feature_train_arr.toarray(),target_feature_train_df_v2))
-            test_arr = np.hstack((input_feature_test_arr.toarray(),target_feature_test_df_v2))
+            train_arr = np.hstack((input_feature_train_arr,target_feature_train_df_v2))
+            test_arr = np.hstack((input_feature_test_arr,target_feature_test_df_v2))
             
             logging.info(train_arr.shape)
             logging.info(test_arr.shape)

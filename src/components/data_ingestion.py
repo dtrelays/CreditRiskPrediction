@@ -27,40 +27,28 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
         try:
-            df=pd.read_csv('notebook/data/credit_data.csv')
+            df=pd.read_csv('notebook/data/credit_risk.csv')
             logging.info('Read the dataset as dataframe')
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
-
-            #dropping duplicate records
-            df = df.drop_duplicates()
-            
-            # Treating missing values
-            df['Occupation'] = df['Occupation'].fillna('Others')
+                        
+            #Dropping id column
+            df = df.drop(['Id'], axis=1)
 
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
 
-            #Feature Engineering and Removing Very low cost vehicle data
-            df['TwoWheeler Cost'] = round((df['Loan Amount']/df['LTV Ratio'])*100,0)
+            #Fixing few outliers in Age, Income and Emp_length
+            df = df[(df['Age'] <= 80) & (df['Income'] <= 1000000) & (df['Emp_length'] <= 45)]
 
-            df = df[df['TwoWheeler Cost']>=20000.0]
+            #Dropping rows with null values in Emp_length
+            df = df.dropna(subset=['Emp_length'])
             
-            # Calculate the number of rows to select (10% of the total number of rows)
-            sample_size = int(0.10 * len(df))
+            #Filling null values in Rate column with mean of the group
+            df['Rate'] = df.groupby(['Home', 'Intent'])['Rate'].transform(lambda x: x.fillna(x.mean()))
 
-            # Randomly select 10% of the rows
-            random_indices = np.random.choice(df.index, sample_size, replace=False)
-            selected_rows = df.loc[random_indices]
-
-            # List of columns to assign "Others" to
-            columns_to_assign_others = ['State','City'] 
-
-            # Assign "Others" to the selected rows in the specified columns
-            selected_rows[columns_to_assign_others] = 'Other'
-
-            # Update the original DataFrame with the modified selected rows
-            df.loc[random_indices] = selected_rows
-
+            #Converting Target label to 0 and 1
+            df['Default'] = df['Default'].replace({'N': 0, 'Y': 1}).astype(int)
+                
             logging.info("Train test split initiated")
             train_set,test_set=train_test_split(df,test_size=0.2,random_state=42)
 
@@ -68,7 +56,7 @@ class DataIngestion:
 
             test_set.to_csv(self.ingestion_config.test_data_path,index=False,header=True)
 
-            logging.info("Inmgestion of the data iss completed")
+            logging.info("Inmgestion of the data is completed")
 
             return(
                 self.ingestion_config.train_data_path,
@@ -78,6 +66,7 @@ class DataIngestion:
             raise CustomException(e,sys)
         
 if __name__=="__main__":
+    
     obj=DataIngestion()
     train_data,test_data=obj.initiate_data_ingestion()
 
