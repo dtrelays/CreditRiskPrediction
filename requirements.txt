@@ -5,10 +5,13 @@ matplotlib
 scikit-learn
 catboost
 xgboost
+lightgbm
 Flask
 tensorflow
 streamlit
 watchdog
 dill
 shap
+imblearn
+keras-tuner
 #-e .
