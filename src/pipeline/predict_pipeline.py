@@ -13,7 +13,15 @@ class PredictPipeline:
         try:
             data_scaled=preprocessor.transform(features)
             preds = model.predict(data_scaled)
-            return preds
+            
+            print(preds[[0]])
+            
+            if preds[0]==0:
+                default="Low"
+            else:
+                default="High"
+            
+            return default
         
         except Exception as e:
             raise CustomException(e,sys)
@@ -23,60 +31,43 @@ class PredictPipeline:
 class CustomData:
     def __init__(  self,
         age: int,
-        gender: str,
         income: int,
-        credit_score: int,
         credit_history_length: int,
-        no_of_existing_loans: int,
         loan_amount: int,
-        loan_tenure: int,
-        existing_customer: str,
-        state: str,
-        city: str,
-        employment_type: str,
-        occupation: str,
-        bike_price: int,
-    ):
+        interest_rate:float,
+        employment_length:int,
+        home_type:str,
+        intent_type:str):
+ 
 
         self.age = age
-        self.gender = gender
         self.income = income
-        self.credit_score = credit_score
         self.credit_history_length = credit_history_length
-        self.no_of_existing_loans = no_of_existing_loans
         self.loan_amount = loan_amount
-        self.loan_tenure = loan_tenure
-        self.existing_customer = existing_customer
-        self.state = state
-        self.city = city
-        self.employment_type = employment_type
-        self.occupation = occupation
-        self.bike_price = bike_price
+        self.interest_rate = interest_rate
+        self.employment_length = employment_length
+        self.home_type = home_type
+        self.intent_type = intent_type
+        
 
 
     def get_data_as_data_frame(self):
         try:
         
             custom_data_input_dict = {
-                "Gender": [self.gender],
                 "Age": [self.age],
                 "Income": [self.income],
-                "Credit Score": [self.credit_score],
-                "Credit History Length": [self.credit_history_length],
-                "Number of Existing Loans": [self.no_of_existing_loans],
-                "Loan Amount": [self.loan_amount],
-                "Loan Tenure": [self.loan_tenure],
-                "Existing Customer": [self.existing_customer],
-                "State": [self.state],
-                "City": [self.city],
-                "Employment Profile": [self.employment_type],
-                "Occupation": [self.occupation],
-                "LTV Ratio": [self.loan_amount/self.bike_price]
+                "Cred_length": [self.credit_history_length],
+                "Amount": [self.loan_amount],
+                "Rate": [self.interest_rate],
+                "Emp_length": [self.employment_length],
+                "Home": [self.home_type],
+                "Intent": [self.intent_type],
+                "Percent_income": [self.loan_amount/self.income]
             }
 
             df = pd.DataFrame(custom_data_input_dict)
-            df['Credit History Length'] = df['Credit History Length']*12
-            df['Loan Tenure'] = df['Loan Tenure']*12
+            df['Percent_income'] = round(df['Percent_income'],2)
             
             return df
 

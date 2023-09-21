@@ -129,27 +129,3 @@ def load_object(file_path):
 
     except Exception as e:
         raise CustomException(e, sys)
-
-
-def get_categorical_variables():
-    try:
-        
-        df_categorical_var = pd.read_csv('notebook/data/credit_data.csv')
-
-        gender = df_categorical_var['Gender'].unique().tolist()
-
-        df_state_city = df_categorical_var[['City', 'State']].drop_duplicates()
-
-        states = df_state_city['State'].unique().tolist()
-
-        df_categorical_var['Occupation'] = df_categorical_var['Occupation'].fillna('Others')
-
-        occupation_list = df_categorical_var['Occupation'].unique().tolist()
-
-        employment_type = df_categorical_var['Employment Profile'].unique().tolist()
-
-        return gender, states, df_state_city, occupation_list, employment_type
-
-    except Exception as e:
-        raise CustomException(e, sys)
-
