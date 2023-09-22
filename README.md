@@ -1,74 +1,61 @@
+# Credit Risk Prediction Classifier
+
+![Credit Risk Prediction](artifacts/creditrisk.png)
 
 
-# Two Wheeler Loan Approval Scoring App
+## 1. Problem Statement
 
-![2W Loan](artifacts/loan_image.png)
+The goal of this project is to develop a machine learning classifier for identifying loan customers with a high propensity to default. The objective is to predict and flag such customers during the loan approval process.
 
-## Overview
+## 2. Data Collection
 
-The Two Wheeler Loan Approval Scoring App is a data science project that aims to provide a predictive model for assessing the creditworthiness of individuals applying for two-wheeler loans. The project leverages a comprehensive dataset, tailored for the Indian demographic, which includes a wide range of features related to applicants' demographics and financial profiles.
+- **Dataset Source**: [Kaggle - Credit Risk Analysis](https://www.kaggle.com/datasets/nanditapore/credit-risk-analysis)
+- **Dataset Overview**: The dataset consists of 12 columns and approximately 32,000 rows.
 
-The primary objective of this project is to predict the likelihood of loan approval based on the applicant's profile. The model assigns a score between 0 and 100 to each applicant, with scores above 85 indicating a high chance of loan approval.
+### Data Columns
 
-This project can help 2W dealers to put in details of prospective customers and get a score on whether he/she is likely to get loan or not.
+- **Demographics**: Age
+- **Employment**: Employment Length (providing insights into the duration of employment)
+- **Financial Information**: Income, Home Details (e.g., Own/Rent), and Credit History Length (offering insights into financial stability and credit behavior)
+- **Loan Details**: Loan Amount, Loan Intent, Interest Rate, etc.
+- **Default**: Indicates whether the customer defaulted on the loan (target variable)
 
+## 3. Data Checks and EDA
 
-## Dataset
+Before proceeding with modeling, several data checks and EDA were performed:
 
-### Dataset Overview
+- Checking for missing values
+- Identifying and handling duplicates
+- Verifying data types of columns
+- Investigating various categories present in different categorical columns
+- Did EDA using univariate, bivariate and multivariate analysis
 
-The dataset used in this project contains a variety of features, including but not limited to:
+## 4. Model Selection and Performance
 
-- Applicant's name
-- Age
-- Gender
-- Employment details
-- Income
-- Credit history
-- Loan amount
-- Loan tenure
-- LTV ratio
-- And more...
+Various machine learning models were experimented with, including:
 
-These features are used to build a predictive model that assesses the creditworthiness of loan applicants.
+- Logistic Regression
+- Decision Tree
+- XGBoost
+- LightGBM
+- Random Forest
+- Neural Network
 
-### Data Source
+The primary aim was to maximize recall while maintaining a balance between accuracy and precision. The project achieved a __recall of 0.9__ using **LightGBM** and an __ROC AUC score of 0.85__.
 
-- Dataset Source - https://www.kaggle.com/datasets/yashkmd/credit-profile-two-wheeler-loan-dataset 
-- The data consists of 15 columns and 278k rows.
+## 5. Deployment
 
-## Methodology
+The project's application is deployed and accessible at the following URL: [Credit Risk Prediction App](https://creditriskprediction-ur6bezvcodjpx3rqfcje7s.streamlit.app/).
 
-### Data Preprocessing
-
-- Data cleaning and handling missing values
-- Feature engineering
-- One-hot encoding of categorical variables
-
-### Model Building
-
-- Selecting an appropriate machine learning algorithm 
-- Training the model on the preprocessed data
-- Model evaluation and fine-tuning
-- We found that xgboost performed the best 
-
-## Results
-
-- We obtained 0.91 r2 score on test and 0.88 on validation data using Xgboost
-- We were able to get feature importance - LTV Ratio, Credit history length,loan tenure and income were among top features
-
-## Usage
-
-You can visit and try on your own -> https://autoloanapproval-6wd28mgszf4gkzkhwbvihe.streamlit.app/
 
 Alternatively you can clone my repository and try on your own in local
 
 ```bash
-# Clone the repository
-git clone https://github.com/dtrelays/AutoLoanApproval.git
+## Clone the repository
+git clone https://github.com/dtrelays/CreditRiskPrediction.git
 
-# Install dependencies (if any)
+## Install dependencies 
 pip install -r requirements.txt
 
-# Run the app
+## Run the app
 streamlit run app.py
