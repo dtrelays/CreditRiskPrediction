@@ -27,21 +27,36 @@ def load_model():
 
 model,preprocessor=load_model()
 
-# gender, states, df_state_city, occupation_list, employment_type = get_categorical_variables()
-
 def main():
 
+    intent_type = ['PERSONAL','EDUCATION','MEDICAL','VENTURE','HOMEIMPROVEMENT','DEBTCONSOLIDATION']
+    
+    home_type = ['RENT','OWN','MORTGAGE','OTHER']
+    
     # Set a background color
-    
-    html_temp = """
-    <div style="background-color: #5CDB95; padding: 20px; text-align: center;">
-        <h1 style="color: #EDF5E1; font-size: 26px; font-weight: bold; text-transform: uppercase;">Credit Risk Prediction App</h1>
-    </div>
-"""
+    st.markdown(
+        """
+        <style>
+        .stApp {
+            background-color: #F5F5F5;
+            color: #333333;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-    st.markdown(html_temp,unsafe_allow_html=True)
-    # Input fields 
-    
+#   <div style="background-color: #5CDB95; padding: 20px; text-align: center;">
+#         <h1 style="color: #EDF5E1; font-size: 26px; font-weight: bold; text-transform: uppercase;">Credit Risk Prediction App</h1>
+#     </div>
+
+    html_temp = """
+    <div style="background-color: #FF725C; padding: 20px; text-align: center;">
+        <h1 style="color: #FFFFFF; font-size: 26px; font-weight: bold; text-transform: uppercase;">Credit Risk Prediction App</h1>
+    </div>
+    """
+
+    st.markdown(html_temp, unsafe_allow_html=True)
 
     # Custom styling for the subheader
     html_temp_header = """
@@ -50,87 +65,94 @@ def main():
         </div>
         """
     st.markdown(html_temp_header, unsafe_allow_html=True)
-    
-    
-    # Dropdowns
-    home_type = ['RENT','OWN','MORTGAGE','OTHER']
-    
-    # Custom styling for the subheader
-    html_temp_header1 = """
-        <div style="background-color:#05386B;padding: 10px;text-align:center;">
-            <h3 style="color:#EDF5E1;font-weight: bold; font-size: 16px;">DEMOGRAPHIC INFO</h3>
-        </div>
+
+    # Demographic info
+    st.subheader("Demographic Info")
+
+    # Custom styling for the input fields
+    input_style = """
+        <style>
+        .stTextInput, .stNumberInput, .stSelectbox {
+            background-color: #FFFFFF;
+            color: #333333;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: none;
+            border: 1px solid #111111;
+            margin-bottom: 16px;
+        }
+        .stTextInput:focus, .stNumberInput:focus, .stSelectbox:focus {
+            border: 2px solid #05386B;
+            box-shadow: none;
+        }
+        </style>
         """
-    st.markdown(html_temp_header1, unsafe_allow_html=True)
+    st.markdown(input_style, unsafe_allow_html=True)
 
-     
-    name = st.text_input("Enter Customer Name:","Manoj Gupta")
-    
-    contact_number = st.text_input("Enter Customer Mobile No:","9876543210")
-
-    age = st.number_input("Enter Customer's Age",18,75,25)
-    
-    selected_home = st.selectbox(f"Select Home Type:", sorted(home_type), index=0)
-
-    income = st.slider("Select Your Income(in USD)",1000,2000000,5000)
-    
-    intent_type = ['PERSONAL','EDUCATION','MEDICAL','VENTURE','HOMEIMPROVEMENT','DEBTCONSOLIDATION']
-    
-    selected_intent =  st.selectbox(f"Select Loan Purpose:", sorted(intent_type), index=0)
- 
-    loan_amount = st.number_input("Enter Loan Amount Required",500,300000)
-    
-    interest_rate = st.number_input("Enter Interest Rate",6.0,30.0,10.0)
-    
-    credit_history_length = st.slider("Select Your Credit History in Years:",0,30,5)
-    
-    employment_length = st.slider("Select Your Employment History in Years:",0,40,5)
+    name = st.text_input("Customer Name",value="Mohit Gupta")
+    contact_number = st.text_input("Mobile Number",value="9876543210")
+    age = st.number_input("Age", 18, 75, 25)
+    selected_home = st.selectbox("Home Type", sorted(home_type), index=0)
+    income = st.slider("Income (USD)", 1000, 2000000, 5000)
+    selected_intent = st.selectbox("Loan Purpose", sorted(intent_type), index=0)
+    loan_amount = st.number_input("Loan Amount Required", 500, 300000)
+    interest_rate = st.number_input("Interest Rate", 6.0, 30.0, 10.0)
+    credit_history_length = st.slider("Credit History (Years)", 0, 30, 5)
+    employment_length = st.slider("Employment History (Years)", 0, 40, 5)
 
     # Validation logic
-    if len(contact_number)>10:
+    if len(contact_number) > 10:
         st.error("Error: Mobile Number cannot be greater than 10 digits")
         st.stop()
 
     # Submit button
     if st.button("Check Default Chance"):
-        
-        data=CustomData(
-            age = age,
-            income = income,
-            credit_history_length = credit_history_length,
-            loan_amount = loan_amount,
-            interest_rate = interest_rate,
-            employment_length = employment_length,
-            home_type = selected_home,
-            intent_type = selected_intent
-        )
-        
-        pred_df=data.get_data_as_data_frame()
-        print(pred_df)
-        print("Before Prediction")
-        
-        predict_pipeline=PredictPipeline()
-        print("Mid Prediction")
-        results=predict_pipeline.predict(pred_df,model,preprocessor)
-        
-        #line 104 is giving error, 
 
-        print("Output from Model")        
-        print(results)
+        data = CustomData(
+            age=age,
+            income=income,
+            credit_history_length=credit_history_length,
+            loan_amount=loan_amount,
+            interest_rate=interest_rate,
+            employment_length=employment_length,
+            home_type=selected_home,
+            intent_type=selected_intent
+        )
+
+        pred_df = data.get_data_as_data_frame()
+
+        predict_pipeline = PredictPipeline()
+        results = predict_pipeline.predict(pred_df, model, preprocessor)
+
+        # Custom styling for the text
+        text_style = """
+            <style>
+            .stText {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333333;
+                margin-top: 16px;
+                margin-bottom: 16px;
+            }
+            </style>
+            """
+        st.markdown(text_style, unsafe_allow_html=True)
 
         # Display the score
-        st.write(f"Getting Loan Default Chance for, {name}")
-        
-        if results=='Low':
-            st.text("Chances are default are low, you can approve the loan")
+        st.write(f"<p class='stText'>Getting Loan Default Chance for: {name}</p>", unsafe_allow_html=True)
+
+        if results == 'Low':
+            st.success("Chances of default are low, you can approve the loan")
         else:
-            st.text("Chances of default are high, you can reject the loan")
+            st.error("Chances of default are high, you should reject the loan")
 
     # Reset button
     if st.button("Reset"):
         # Clear all inputs and selections
         st.experimental_rerun()
 
-    
+
 if __name__=="__main__":
     main()
