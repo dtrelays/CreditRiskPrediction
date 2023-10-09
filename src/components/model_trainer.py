@@ -43,7 +43,7 @@ class ModelTrainer:
             "Light GBM Classifier":lgb.LGBMClassifier(),
         }
             
-                        
+            
             params = {
                 "Logistic Regression": {
                     "C": [0.001, 0.01, 0.1, 1, 10],
@@ -51,38 +51,39 @@ class ModelTrainer:
                 },
                 "XGBClassifier": {
                     "learning_rate": [0.01, 0.1, 0.2],
-                    "n_estimators": [100, 200, 300],
-                    "max_depth": [3, 4, 5,10,20],
+                    "n_estimators": [100, 200],
+                    "max_depth": [3, 4, 5,10],
                     "min_child_weight": [1, 2, 3],
                     "subsample": [0.8, 0.9, 1.0],
                     "colsample_bytree": [0.8, 0.9, 1.0]
                 },
                 "CatBoost Classifier": {
-                    "iterations": [100, 200, 300],
+                    "iterations": [100, 200],
                     "learning_rate": [0.01, 0.1, 0.2],
-                    "depth": [3, 4, 5,10,20],
-                    "l2_leaf_reg": [1, 3, 5, 7, 9]
+                    "depth": [3, 4, 5,10],
+                    "l2_leaf_reg": [3, 5, 7, 9]
                 },
                 "Decision Tree": {
-                    "max_depth": [10, 20, 30],
+                    "max_depth": [2, 3, 5,7],
                     "min_samples_split": [2, 5, 10],
-                    "min_samples_leaf": [1, 2, 4],
+                    "min_samples_leaf": [2, 4],
                     "criterion": ["gini", "entropy"]
                 },
                 "Random Forest Classifier": {
-                    "n_estimators": [100, 200, 300],
-                    "max_depth": [10, 20, 30],
+                    "n_estimators": [100, 200],
+                    "max_depth": [2,3,5,7],
                     "min_samples_split": [2, 5, 10],
-                    "min_samples_leaf": [1, 2, 4],
+                    "min_samples_leaf": [2, 4],
                     "criterion": ["gini", "entropy"]
                 },
                 "Light GBM Classifier": {
                     "learning_rate": [0.01, 0.1, 0.2],
-                    "n_estimators": [100, 200, 300],
-                    "max_depth": [3, 4, 5,10,20],
+                    "n_estimators": [100, 200],
+                    "max_depth": [3, 4, 5,10],
                     "num_leaves": [31, 63, 127]
                 }
             }
+            
 
             model_report=evaluate_models(X_train=X_train,y_train=y_train,X_val=X_test,y_val=y_test,
                                              models=models,params=params)
